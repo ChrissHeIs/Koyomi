@@ -19,7 +19,8 @@ class ViewController: UIViewController {
             koyomi.weeks = ("Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat")
             koyomi.style = .standard
             koyomi.dayPosition = .center
-            koyomi.selectionMode = .sequence(style: .semicircleEdge)
+            koyomi.selectionMode = .sequence(style: .circlesAndLine(.gray))
+            koyomi.circularViewDiameter = 0.5
             koyomi.selectedStyleColor = UIColor(red: 203/255, green: 119/255, blue: 223/255, alpha: 1)
             koyomi
                 .setDayFont(size: 14)

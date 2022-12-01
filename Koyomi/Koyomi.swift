@@ -130,7 +130,7 @@ public enum KoyomiStyle {
 public enum SelectionMode {
     case single(style: Style), multiple(style: Style), sequence(style: SequenceStyle), none
     
-    public enum SequenceStyle { case background, circle, line, semicircleEdge }
+    public enum SequenceStyle { case background, circle, line, semicircleEdge, circlesAndLine(UIColor) }
     public enum Style { case background, circle, line }
 }
 
@@ -496,7 +496,12 @@ private extension Koyomi {
                     
                 case (.sequence(style: .line), true):
                     return .line(position: sequencePosition)
-                    
+                case (.sequence(style: .circlesAndLine(let color)), true):
+                    if model.sequenceDates.end == nil {
+                        return .circle
+                    } else {
+                        return .circleAndLine(position: sequencePosition, color: color)
+                    }
                 default: return .standard
                 }
             }()

@@ -14,6 +14,7 @@ final class KoyomiCell: UICollectionViewCell {
     fileprivate let contentLabel: UILabel = .init()
     fileprivate let circularView: UIView  = .init()
     fileprivate let lineView: UIView      = .init()
+    fileprivate let sequenceLineView: UIView      = .init()
     
     fileprivate let leftSemicircleView: UIView  = .init()
     fileprivate let rightSemicircleView: UIView = .init()
@@ -21,7 +22,7 @@ final class KoyomiCell: UICollectionViewCell {
     static let identifier = "KoyomiCell"
     
     enum CellStyle {
-        case standard, circle, semicircleEdge(position: SequencePosition), line(position: SequencePosition?)
+        case standard, circle, semicircleEdge(position: SequencePosition), line(position: SequencePosition?), circleAndLine(position: SequencePosition, color: UIColor)
         
         enum SequencePosition { case left, middle, right }
     }
@@ -82,6 +83,7 @@ final class KoyomiCell: UICollectionViewCell {
     
     func configureAppearanse(of style: CellStyle, withColor color: UIColor, backgroundColor: UIColor, isSelected: Bool) {
         switch style {
+            
         case .standard:
             self.backgroundColor = isSelected ? color : backgroundColor
             
@@ -89,6 +91,7 @@ final class KoyomiCell: UICollectionViewCell {
             lineView.isHidden = true
             rightSemicircleView.isHidden = true
             leftSemicircleView.isHidden  = true
+            sequenceLineView.isHidden = true
             
         // isSelected is always true
         case .circle:
@@ -99,11 +102,13 @@ final class KoyomiCell: UICollectionViewCell {
             lineView.isHidden = true
             rightSemicircleView.isHidden = true
             leftSemicircleView.isHidden  = true
+            sequenceLineView.isHidden = true
             
         // isSelected is always true
         case .semicircleEdge(let position):
             lineView.isHidden = true
             circularView.isHidden = true
+            sequenceLineView.isHidden = true
             
             if case .left = position {
                 rightSemicircleView.isHidden = false
@@ -143,6 +148,7 @@ final class KoyomiCell: UICollectionViewCell {
             circularView.isHidden = true
             lineView.isHidden = false
             lineView.backgroundColor = color
+            sequenceLineView.isHidden = true
             
             // Config of lineView should end. (configureLineView())
             // position is only sequence style
@@ -158,6 +164,23 @@ final class KoyomiCell: UICollectionViewCell {
                 lineView.frame.origin.x   = (bounds.width - lineView.frame.width) / 2
             case .right:
                 lineView.frame.origin.x = 0
+            }
+        case .circleAndLine(let position, let lineColor):
+            rightSemicircleView.isHidden = true
+            leftSemicircleView.isHidden  = true
+            circularView.isHidden = position == .middle
+            circularView.backgroundColor = color
+            lineView.isHidden = true
+            sequenceLineView.isHidden = false
+            sequenceLineView.backgroundColor = lineColor
+            
+            switch position {
+            case .left:
+                sequenceLineView.frame.origin.x = bounds.width / 2
+            case .middle:
+                sequenceLineView.frame.origin.x = 0
+            case .right:
+                sequenceLineView.frame.origin.x = -bounds.width / 2
             }
         }
     }
@@ -192,6 +215,9 @@ private extension KoyomiCell {
     }
     
     func setup() {
+        sequenceLineView.isHidden = true
+        addSubview(sequenceLineView)
+        
         circularView.isHidden = true
         addSubview(circularView)
         
@@ -223,6 +249,8 @@ private extension KoyomiCell {
         let diameter = bounds.width * circularViewDiameter
         circularView.frame = CGRect(x: (bounds.width - diameter) / 2, y: (bounds.height - diameter) / 2, width: diameter, height: diameter)
         circularView.layer.cornerRadius = diameter / 2
+        
+        sequenceLineView.frame = CGRect(x: 0, y: (bounds.height - diameter) / 2, width: bounds.width, height: diameter)
     }
     
     func configureLineView() {
