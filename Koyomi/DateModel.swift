@@ -332,6 +332,12 @@ private extension DateModel {
         currentDates
             .filter { fromDate <= $0 && toDate >= $0 }
             .forEach { selectedDates[$0] = isSelected }
+        
+        let newSelectedDates = currentDates
+            .filter { fromDate <= $0 && toDate >= $0 }
+        if selectionMode == .sequence {
+            sequenceDates = SequenceDates(start: newSelectedDates.first, end: newSelectedDates.last ?? fromDate)
+        }
     }
     
     func atBeginning(of month: MonthType) -> Date {
