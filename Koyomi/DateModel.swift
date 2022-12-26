@@ -139,6 +139,7 @@ final class DateModel: NSObject {
     
     func unselectAll() {
         selectedDates.keys(of: true).forEach { selectedDates[$0] = false }
+        sequenceDates = SequenceDates(start: nil, end: nil)
     }
     
     func select(with indexPath: IndexPath) {
