@@ -174,13 +174,15 @@ final class KoyomiCell: UICollectionViewCell {
             sequenceLineView.isHidden = false
             sequenceLineView.backgroundColor = lineColor
             
+            sequenceLineView.frame.size.width = bounds.width * 0.6
             switch position {
             case .left:
                 sequenceLineView.frame.origin.x = bounds.width / 2
             case .middle:
                 sequenceLineView.frame.origin.x = 0
+                sequenceLineView.frame.size.width = bounds.width
             case .right:
-                sequenceLineView.frame.origin.x = -bounds.width / 2
+                sequenceLineView.frame.origin.x = -bounds.width * 0.1
             }
         }
     }
