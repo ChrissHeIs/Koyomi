@@ -336,8 +336,12 @@ private extension DateModel {
         
         let newSelectedDates = currentDates
             .filter { fromDate <= $0 && toDate >= $0 }
-        if selectionMode == .sequence {
-            sequenceDates = SequenceDates(start: newSelectedDates.first, end: newSelectedDates.last ?? fromDate)
+        if isSelected {
+            sequenceDates = SequenceDates(start: fromDate, end: toDate)
+        } else {
+            if selectionMode == .sequence && !newSelectedDates.isEmpty {
+                sequenceDates = SequenceDates(start: newSelectedDates.first, end: newSelectedDates.last ?? fromDate)
+            }
         }
     }
     
