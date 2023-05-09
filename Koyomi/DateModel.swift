@@ -125,6 +125,9 @@ final class DateModel: NSObject {
             set(true, withFrom: fromDate, to: toDate)
         } else if let fromDate = fromDate.formated() {
             selectedDates[fromDate] = true
+            if selectionMode == .sequence {
+                sequenceDates = SequenceDates(start: fromDate, end: nil)
+            }
         }
     }
     
